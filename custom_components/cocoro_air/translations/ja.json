@@ -1,0 +1,103 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "COCORO MEMBERSにログイン",
+        "description": "COCORO AIR・COCORO WASHで使用しているアカウントを入力してください。登録済みの空気清浄機と洗濯機を自動検出します。",
+        "data": {
+          "email": "メールアドレス",
+          "password": "パスワード"
+        }
+      },
+      "device": {
+        "title": "機器を選択",
+        "description": "Home Assistantに追加する機器を選択してください。",
+        "data": {
+          "devices": "機器"
+        }
+      },
+      "reauth_confirm": {
+        "title": "再ログイン",
+        "description": "設定済みの機器が登録されているアカウントを入力してください。",
+        "data": {
+          "email": "メールアドレス",
+          "password": "パスワード"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "ログインに失敗しました。認証情報を確認してください。追加認証が必要な場合は公式サイトでログインしてください。",
+      "cannot_connect": "COCOROに接続できません。時間をおいて再度お試しください。",
+      "select_device": "利用可能な機器を1台以上選択してください。",
+      "wrong_account": "このアカウントに設定済みのすべての機器が登録されていません。"
+    },
+    "abort": {
+      "already_configured": "この機器は設定済みです。既存の統合の「設定」から機器を追加できます。",
+      "no_devices_found": "対応する空気清浄機または洗濯機が見つかりません。公式アプリで機器を登録してください。",
+      "reauth_successful": "認証情報を更新しました。"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "機器を選択",
+        "description": "保存済みのアカウントで機器を再検出しました。利用する機器を選択してください。",
+        "data": {
+          "devices": "機器"
+        }
+      }
+    },
+    "error": {
+      "select_device": "利用可能な機器を1台以上選択してください。"
+    },
+    "abort": {
+      "invalid_auth": "ログインに失敗しました。認証情報を確認してください。追加認証が必要な場合は公式サイトでログインしてください。",
+      "cannot_connect": "COCOROに接続できません。時間をおいて再度お試しください。"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "operation_state": {
+        "name": "運転状態",
+        "state": {
+          "washing": "洗い中",
+          "rinsing": "すすぎ中",
+          "spinning": "脱水中",
+          "drying": "乾燥中",
+          "finished": "終了",
+          "paused": "一時停止・待機中",
+          "running": "運転中",
+          "deodorizing": "消臭中",
+          "idle": "停止中",
+          "calculating_drying_time": "乾燥時間計算中",
+          "recalculating_drying_time": "乾燥時間再計算中",
+          "prewashing": "予洗い中",
+          "reserved": "予約設定中",
+          "error": "エラー",
+          "tub_cleaning": "槽洗浄中",
+          "tub_drying": "槽乾燥中",
+          "water_path_cleaning": "水路洗浄中"
+        }
+      },
+      "remaining_time": {
+        "name": "残り時間"
+      }
+    },
+    "binary_sensor": {
+      "running": {
+        "name": "運転中"
+      },
+      "reserved": {
+        "name": "予約"
+      },
+      "fault": {
+        "name": "異常"
+      }
+    },
+    "switch": {
+      "power": {
+        "name": "電源"
+      }
+    }
+  }
+}

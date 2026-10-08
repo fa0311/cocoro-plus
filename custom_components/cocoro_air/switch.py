@@ -1,10 +1,10 @@
-"""Retain the existing AIR humidity-mode entity."""
+"""Air-cleaner power control."""
 
 from __future__ import annotations
 
 from typing import cast
 
-from homeassistant.components.humidifier import HumidifierDeviceClass, HumidifierEntity
+from homeassistant.components.switch import SwitchEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
@@ -22,42 +22,36 @@ PARALLEL_UPDATES = 1
 async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
-    """Only air cleaners with controllable humidification get this entity."""
     async_add_entities(
-        CocoroAirHumidifier(coordinator)
+        CocoroAirPower(coordinator)
         for coordinator in hass.data[DOMAIN][entry.entry_id].coordinators
         if coordinator.device.service == Service.AIR
-        and coordinator.device.has_humidifier
     )
 
 
-class CocoroAirHumidifier(CocoroEntity, HumidifierEntity):
-    """Humidity mode, with the original unique ID and on/off semantics."""
+class CocoroAirPower(CocoroEntity, SwitchEntity):
+    """Switch the complete air cleaner on/off independently of humidification."""
 
-    _attr_name = "Humidity Mode"
-    _attr_device_class = HumidifierDeviceClass.HUMIDIFIER
+    _attr_translation_key = "power"
+    _attr_icon = "mdi:air-purifier"
 
     def __init__(self, coordinator: CocoroCoordinator) -> None:
-        super().__init__(coordinator, "humidity_mode")
+        super().__init__(coordinator, "power")
 
     @property
     def is_on(self) -> bool | None:
-        return (self.coordinator.data or {}).get("humidity_mode")
+        return (self.coordinator.data or {}).get("power")
 
-    @property
-    def icon(self) -> str:
-        return "mdi:air-humidifier" if self.is_on else "mdi:air-humidifier-off"
-
-    async def _async_set_mode(self, enabled: bool) -> None:
+    async def _async_set_power(self, enabled: bool) -> None:
         api = cast(AirDevice, self.coordinator.api)
         try:
-            await api.async_set_humidity_mode(enabled)
+            await api.async_set_power(enabled)
         except CocoroError as err:
             raise HomeAssistantError(str(err)) from err
         await self.coordinator.async_request_refresh()
 
     async def async_turn_on(self, **kwargs) -> None:
-        await self._async_set_mode(True)
+        await self._async_set_power(True)
 
     async def async_turn_off(self, **kwargs) -> None:
-        await self._async_set_mode(False)
+        await self._async_set_power(False)

@@ -1,15 +1,20 @@
 {
   "domain": "cocoro_air",
-  "name": "Cocoro Air",
+  "name": "COCORO AIR & WASH",
   "config_flow": true,
   "documentation": "https://github.com/hldh214/cocoro-air",
   "issue_tracker": "https://github.com/hldh214/cocoro-air/issues",
-  "requirements": ["httpx"],
+  "requirements": [
+    "httpx>=0.26.0"
+  ],
   "ssdp": [],
   "zeroconf": [],
   "homekit": {},
   "dependencies": [],
-  "codeowners": ["@hldh214"],
+  "codeowners": [
+    "@hldh214"
+  ],
   "iot_class": "cloud_polling",
-  "version": "1.0.1"
+  "version": "1.1.0",
+  "integration_type": "hub"
 }
