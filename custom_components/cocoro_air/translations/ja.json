@@ -23,6 +23,14 @@
           "email": "メールアドレス",
           "password": "パスワード"
         }
+      },
+      "reconfigure": {
+        "title": "再ログイン",
+        "description": "設定済みの機器が登録されているアカウントを入力してください。",
+        "data": {
+          "email": "メールアドレス",
+          "password": "パスワード"
+        }
       }
     },
     "error": {
@@ -34,7 +42,8 @@
     "abort": {
       "already_configured": "この機器は設定済みです。既存の統合の「設定」から機器を追加できます。",
       "no_devices_found": "対応する空気清浄機または洗濯機が見つかりません。公式アプリで機器を登録してください。",
-      "reauth_successful": "認証情報を更新しました。"
+      "reauth_successful": "認証情報を更新しました。",
+      "reconfigure_successful": "設定を更新しました。"
     }
   },
   "options": {

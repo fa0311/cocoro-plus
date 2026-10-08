@@ -142,12 +142,19 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
+    async def async_step_reconfigure(self, user_input=None) -> FlowResult:
+        """Update credentials; appliance selection is available through options."""
+        return await self._async_step_credentials(user_input, "reconfigure")
+
     async def async_step_reauth(self, entry_data: dict[str, Any]) -> FlowResult:
         return await self.async_step_reauth_confirm()
 
     async def async_step_reauth_confirm(
         self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
+        return await self._async_step_credentials(user_input, "reauth_confirm")
+
+    async def _async_step_credentials(self, user_input, step_id) -> FlowResult:
         entry = self.hass.config_entries.async_get_entry(self.context["entry_id"])
         assert entry is not None
         errors = {}
@@ -165,7 +172,8 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     errors["base"] = "wrong_account"
                 else:
                     return self.async_update_reload_and_abort(
-                        entry, data={**entry.data, **user_input}
+                        entry, data={**entry.data, **user_input},
+                        reason="reconfigure_successful" if step_id == "reconfigure" else "reauth_successful"
                     )
             except CocoroError as err:
                 errors = _error(err)
@@ -176,7 +184,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             }
         )
         return self.async_show_form(
-            step_id="reauth_confirm", data_schema=schema, errors=errors
+            step_id=step_id, data_schema=schema, errors=errors
         )
 
 

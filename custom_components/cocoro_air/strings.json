@@ -23,6 +23,14 @@
           "email": "Email",
           "password": "Password"
         }
+      },
+      "reconfigure": {
+        "title": "Sign in again",
+        "description": "Enter the credentials for the account containing your configured appliances.",
+        "data": {
+          "email": "Email",
+          "password": "Password"
+        }
       }
     },
     "error": {
@@ -34,7 +42,8 @@
     "abort": {
       "already_configured": "These appliances are already configured. Use Configure on the existing entry to add appliances.",
       "no_devices_found": "No supported air cleaners or washers were found. Register appliances using the official COCORO app first.",
-      "reauth_successful": "Authentication updated successfully."
+      "reauth_successful": "Authentication updated successfully.",
+      "reconfigure_successful": "Configuration updated."
     }
   },
   "options": {
