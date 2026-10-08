@@ -39,7 +39,12 @@ async def async_discover(
 
 def _saved_devices(entry: config_entries.ConfigEntry) -> list[Device]:
     if CONF_DEVICES in entry.data:
-        return [Device.from_dict(saved) for saved in entry.data[CONF_DEVICES]]
+        return [
+            Device.from_dict(saved)
+            if isinstance(saved, dict)
+            else Device(Service.AIR, saved, "", "COCORO AIR")
+            for saved in entry.data[CONF_DEVICES]
+        ]
     return [
         Device(
             Service.AIR,
@@ -172,8 +177,11 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     errors["base"] = "wrong_account"
                 else:
                     return self.async_update_reload_and_abort(
-                        entry, data={**entry.data, **user_input},
-                        reason="reconfigure_successful" if step_id == "reconfigure" else "reauth_successful"
+                        entry,
+                        data={**entry.data, **user_input},
+                        reason="reconfigure_successful"
+                        if step_id == "reconfigure"
+                        else "reauth_successful",
                     )
             except CocoroError as err:
                 errors = _error(err)
@@ -183,9 +191,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 vol.Required(CONF_PASSWORD): str,
             }
         )
-        return self.async_show_form(
-            step_id=step_id, data_schema=schema, errors=errors
-        )
+        return self.async_show_form(step_id=step_id, data_schema=schema, errors=errors)
 
 
 class OptionsFlow(config_entries.OptionsFlow):

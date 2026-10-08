@@ -25,7 +25,7 @@
         }
       },
       "reconfigure": {
-        "title": "再ログイン",
+        "title": "ログイン情報を変更",
         "description": "設定済みの機器が登録されているアカウントを入力してください。",
         "data": {
           "email": "メールアドレス",
@@ -74,7 +74,6 @@
           "spinning": "脱水中",
           "drying": "乾燥中",
           "finished": "終了",
-          "paused": "一時停止・待機中",
           "running": "運転中",
           "deodorizing": "消臭中",
           "idle": "停止中",
@@ -90,6 +89,135 @@
       },
       "remaining_time": {
         "name": "残り時間"
+      },
+      "air_quality": {
+        "name": "空気の汚れ"
+      },
+      "operating_status": {
+        "name": "運転モード"
+      },
+      "brightness": {
+        "name": "室内の明るさ"
+      },
+      "cost_today": {
+        "name": "今日の電気代"
+      },
+      "cost_month": {
+        "name": "今月の電気代"
+      },
+      "electricity_rate": {
+        "name": "電気料金単価"
+      },
+      "outdoor_temperature": {
+        "name": "屋外温度"
+      },
+      "outdoor_humidity": {
+        "name": "屋外湿度"
+      },
+      "pollen": {
+        "name": "花粉予報"
+      },
+      "pm25_forecast": {
+        "name": "PM2.5予報"
+      },
+      "yellow_sand": {
+        "name": "黄砂予報"
+      },
+      "laundry": {
+        "name": "洗濯指数"
+      },
+      "weather_code": {
+        "name": "天気コード"
+      },
+      "dust_filter_remaining": {
+        "name": "集じんフィルターの残り寿命"
+      },
+      "dust_filter_last_cleaned": {
+        "name": "集じんフィルターのお手入れ日時"
+      },
+      "deodorizing_filter_remaining": {
+        "name": "脱臭フィルターの残り寿命"
+      },
+      "deodorizing_filter_last_cleaned": {
+        "name": "脱臭フィルターのお手入れ日時"
+      },
+      "humidifying_filter_remaining": {
+        "name": "加湿フィルターの残り寿命"
+      },
+      "humidifying_filter_last_cleaned": {
+        "name": "加湿フィルターのお手入れ日時"
+      },
+      "ion_cartridge_remaining": {
+        "name": "銀イオンカートリッジの残り寿命"
+      },
+      "ion_cartridge_last_cleaned": {
+        "name": "銀イオンカートリッジのお手入れ日時"
+      },
+      "pci_unit_remaining": {
+        "name": "イオンユニットの残り寿命"
+      },
+      "pci_unit_last_cleaned": {
+        "name": "イオンユニットのお手入れ日時"
+      },
+      "ac_filter_care_remaining": {
+        "name": "エアコンフィルターの残り寿命"
+      },
+      "ac_filter_care_last_cleaned": {
+        "name": "エアコンフィルターのお手入れ日時"
+      },
+      "dust_box_remaining": {
+        "name": "ダストボックスの残り寿命"
+      },
+      "dust_box_last_cleaned": {
+        "name": "ダストボックスのお手入れ日時"
+      },
+      "back_panel_remaining": {
+        "name": "後ろパネルの残り寿命"
+      },
+      "back_panel_last_cleaned": {
+        "name": "後ろパネルのお手入れ日時"
+      },
+      "air_filter_remaining": {
+        "name": "エアフィルターの残り寿命"
+      },
+      "air_filter_last_cleaned": {
+        "name": "エアフィルターのお手入れ日時"
+      },
+      "prefilter_remaining": {
+        "name": "使い捨てプレフィルターの残り寿命"
+      },
+      "prefilter_last_cleaned": {
+        "name": "使い捨てプレフィルターのお手入れ日時"
+      },
+      "humidifying_prefilter_remaining": {
+        "name": "加湿プレフィルターの残り寿命"
+      },
+      "humidifying_prefilter_last_cleaned": {
+        "name": "加湿プレフィルターのお手入れ日時"
+      },
+      "temperature": {
+        "name": "温度"
+      },
+      "humidity": {
+        "name": "湿度"
+      },
+      "pm25": {
+        "name": "PM2.5"
+      },
+      "cleaned_air_volume": {
+        "name": "浄化した空気量"
+      },
+      "odor_level": {
+        "name": "においレベル"
+      },
+      "dust_level": {
+        "name": "ほこりレベル"
+      },
+      "cleanliness_level": {
+        "name": "空気の汚れレベル"
+      },
+      "water_tank": {
+        "name": "水タンク"
       }
     },
     "binary_sensor": {
@@ -101,11 +229,109 @@
       },
       "fault": {
         "name": "異常"
+      },
+      "plasma_enabled": {
+        "name": "プラズマクラスター"
+      },
+      "care_error": {
+        "name": "お手入れ必要"
+      },
+      "unit_date_error": {
+        "name": "イオンユニットの寿命"
+      },
+      "unit_out_error": {
+        "name": "イオンユニット未装着"
+      },
+      "humidifying": {
+        "name": "加湿中"
+      },
+      "water_empty": {
+        "name": "給水必要"
+      },
+      "child_lock": {
+        "name": "チャイルドロック"
+      },
+      "light_sensor_bright": {
+        "name": "室内が明るい"
+      },
+      "care_dust_filter": {
+        "name": "集じんフィルターのお手入れ"
+      },
+      "care_deodorizing_filter": {
+        "name": "脱臭フィルターのお手入れ"
+      },
+      "care_humidifying_filter": {
+        "name": "加湿フィルターのお手入れ"
+      },
+      "care_ion_cartridge": {
+        "name": "銀イオンカートリッジのお手入れ"
+      },
+      "care_pci_unit": {
+        "name": "イオンユニットのお手入れ"
+      },
+      "care_ac_filter_care": {
+        "name": "エアコンフィルターのお手入れ"
+      },
+      "care_dust_box": {
+        "name": "ダストボックスのお手入れ"
+      },
+      "care_back_panel": {
+        "name": "後ろパネルのお手入れ"
+      },
+      "care_air_filter": {
+        "name": "エアフィルターのお手入れ"
+      },
+      "care_prefilter": {
+        "name": "使い捨てプレフィルターのお手入れ"
+      },
+      "care_humidifying_prefilter": {
+        "name": "加湿プレフィルターのお手入れ"
+      },
+      "water_tank": {
+        "name": "水タンク"
       }
     },
     "switch": {
       "power": {
         "name": "電源"
+      },
+      "cloud": {
+        "name": "クラウド自動運転"
+      },
+      "humidification": {
+        "name": "加湿"
+      },
+      "notify_air_cleaner": {
+        "name": "空気清浄機の通知"
+      },
+      "notify_temperature": {
+        "name": "温度の通知"
+      },
+      "notify_human": {
+        "name": "人感センサーの通知"
+      }
+    },
+    "fan": {
+      "fan": {
+        "name": "空気清浄"
+      }
+    },
+    "number": {
+      "notify_temperature_lower": {
+        "name": "低温通知のしきい値"
+      },
+      "notify_temperature_upper": {
+        "name": "高温通知のしきい値"
+      }
+    },
+    "button": {
+      "refresh": {
+        "name": "クラウド情報を更新"
+      }
+    },
+    "humidifier": {
+      "humidity_mode": {
+        "name": "加湿設定"
       }
     }
   }

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import asyncio
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from html.parser import HTMLParser
 from typing import Any
 
@@ -20,9 +20,18 @@ class AuthenticationError(CocoroError):
     """Authentication failed or requires interactive verification."""
 
 
+class CocoroResponseError(CocoroError):
+    """An embedded API status failed; retain details without logging its body."""
+
+    def __init__(self, status: int, info: str | None) -> None:
+        super().__init__(f"COCORO service returned status {status}")
+        self.status = status
+        self.info = info
+
+
 @dataclass(frozen=True)
 class Device:
-    """Only metadata needed by the integration; no postal/MAC/user data."""
+    """Appliance capabilities and location needed by device and weather features."""
 
     service: Service
     device_id: str
@@ -32,6 +41,8 @@ class Device:
     has_humidifier: bool = False
     has_pm25: bool = True
     has_dust: bool = True
+    spec: dict[str, Any] = field(default_factory=dict)
+    zip_code: str = ""
 
     @property
     def key(self) -> str:
@@ -156,7 +167,7 @@ class CocoroClient:
             self._generation += 1
 
     async def async_request(
-        self, path: str, envelope: str, *, method: str = "GET", **kwargs: Any
+        self, path: str, envelope: str | None, *, method: str = "GET", **kwargs: Any
     ) -> dict[str, Any]:
         """Read the BFF status inside HTTP 200; reauthenticate at most once."""
         if not self._authenticated:
@@ -177,7 +188,12 @@ class CocoroClient:
                     result: dict[str, Any] = {}
                 else:
                     response.raise_for_status()
-                    result = response.json()[envelope]
+                    envelopes = response.json()
+                    result = (
+                        envelopes[envelope]
+                        if envelope is not None
+                        else next(iter(envelopes.values()))
+                    )
                     status = result["status"]
                 if status == 401:
                     if retried:
@@ -188,7 +204,7 @@ class CocoroClient:
                 if status == 404:
                     raise CocoroError("Device is unavailable or no longer registered")
                 if status < 200 or status >= 300:
-                    raise CocoroError(f"COCORO service returned status {status}")
+                    raise CocoroResponseError(status, result["body"].get("info"))
                 return result["body"]
             except httpx.HTTPStatusError as err:
                 if err.response.status_code == 404:
@@ -235,6 +251,8 @@ class CocoroClient:
                     and spec.get("hasPM25Sensor", False),
                     has_dust=self.service == Service.AIR
                     and spec.get("hasDustSensor", False),
+                    spec=spec if self.service == Service.AIR else {},
+                    zip_code=info.get("zip_code") or "",
                     has_humidifier=(
                         self.service == Service.AIR
                         and spec.get("hasHumidFunc", False)

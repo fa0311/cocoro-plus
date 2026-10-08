@@ -2,16 +2,11 @@
 
 from __future__ import annotations
 
-from typing import cast
-
 from homeassistant.components.humidifier import HumidifierDeviceClass, HumidifierEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .air import AirDevice
-from .api import CocoroError
 from .const import DOMAIN, Service
 from .coordinator import CocoroCoordinator
 from .entity import CocoroEntity
@@ -34,7 +29,7 @@ async def async_setup_entry(
 class CocoroAirHumidifier(CocoroEntity, HumidifierEntity):
     """Humidity mode, with the original unique ID and on/off semantics."""
 
-    _attr_name = "Humidity Mode"
+    _attr_translation_key = "humidity_mode"
     _attr_device_class = HumidifierDeviceClass.HUMIDIFIER
 
     def __init__(self, coordinator: CocoroCoordinator) -> None:
@@ -49,12 +44,7 @@ class CocoroAirHumidifier(CocoroEntity, HumidifierEntity):
         return "mdi:air-humidifier" if self.is_on else "mdi:air-humidifier-off"
 
     async def _async_set_mode(self, enabled: bool) -> None:
-        api = cast(AirDevice, self.coordinator.api)
-        try:
-            await api.async_set_humidity_mode(enabled)
-        except CocoroError as err:
-            raise HomeAssistantError(str(err)) from err
-        await self.coordinator.async_request_refresh()
+        await self.coordinator.async_control("humidification", enabled)
 
     async def async_turn_on(self, **kwargs) -> None:
         await self._async_set_mode(True)

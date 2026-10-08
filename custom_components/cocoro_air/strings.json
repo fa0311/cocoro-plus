@@ -25,7 +25,7 @@
         }
       },
       "reconfigure": {
-        "title": "Sign in again",
+        "title": "Update login credentials",
         "description": "Enter the credentials for the account containing your configured appliances.",
         "data": {
           "email": "Email",
@@ -74,7 +74,6 @@
           "spinning": "Spinning",
           "drying": "Drying",
           "finished": "Finished",
-          "paused": "Paused / standby",
           "running": "Running",
           "deodorizing": "Deodorizing",
           "idle": "Idle",
@@ -90,6 +89,135 @@
       },
       "remaining_time": {
         "name": "Remaining time"
+      },
+      "air_quality": {
+        "name": "Air quality"
+      },
+      "operating_status": {
+        "name": "Operating status"
+      },
+      "brightness": {
+        "name": "Brightness"
+      },
+      "cost_today": {
+        "name": "Electricity cost today"
+      },
+      "cost_month": {
+        "name": "Electricity cost this month"
+      },
+      "electricity_rate": {
+        "name": "Electricity rate"
+      },
+      "outdoor_temperature": {
+        "name": "Outdoor temperature"
+      },
+      "outdoor_humidity": {
+        "name": "Outdoor humidity"
+      },
+      "pollen": {
+        "name": "Pollen"
+      },
+      "pm25_forecast": {
+        "name": "PM2.5 forecast"
+      },
+      "yellow_sand": {
+        "name": "Yellow sand"
+      },
+      "laundry": {
+        "name": "Laundry forecast"
+      },
+      "weather_code": {
+        "name": "Weather code"
+      },
+      "dust_filter_remaining": {
+        "name": "Dust filter remaining life"
+      },
+      "dust_filter_last_cleaned": {
+        "name": "Dust filter last cleaned"
+      },
+      "deodorizing_filter_remaining": {
+        "name": "Deodorizing filter remaining life"
+      },
+      "deodorizing_filter_last_cleaned": {
+        "name": "Deodorizing filter last cleaned"
+      },
+      "humidifying_filter_remaining": {
+        "name": "Humidifying filter remaining life"
+      },
+      "humidifying_filter_last_cleaned": {
+        "name": "Humidifying filter last cleaned"
+      },
+      "ion_cartridge_remaining": {
+        "name": "Ion cartridge remaining life"
+      },
+      "ion_cartridge_last_cleaned": {
+        "name": "Ion cartridge last cleaned"
+      },
+      "pci_unit_remaining": {
+        "name": "Ion unit remaining life"
+      },
+      "pci_unit_last_cleaned": {
+        "name": "Ion unit last cleaned"
+      },
+      "ac_filter_care_remaining": {
+        "name": "AC filter remaining life"
+      },
+      "ac_filter_care_last_cleaned": {
+        "name": "AC filter last cleaned"
+      },
+      "dust_box_remaining": {
+        "name": "Dust box remaining life"
+      },
+      "dust_box_last_cleaned": {
+        "name": "Dust box last cleaned"
+      },
+      "back_panel_remaining": {
+        "name": "Back panel remaining life"
+      },
+      "back_panel_last_cleaned": {
+        "name": "Back panel last cleaned"
+      },
+      "air_filter_remaining": {
+        "name": "Air filter remaining life"
+      },
+      "air_filter_last_cleaned": {
+        "name": "Air filter last cleaned"
+      },
+      "prefilter_remaining": {
+        "name": "Prefilter remaining life"
+      },
+      "prefilter_last_cleaned": {
+        "name": "Prefilter last cleaned"
+      },
+      "humidifying_prefilter_remaining": {
+        "name": "Humidifying prefilter remaining life"
+      },
+      "humidifying_prefilter_last_cleaned": {
+        "name": "Humidifying prefilter last cleaned"
+      },
+      "temperature": {
+        "name": "Temperature"
+      },
+      "humidity": {
+        "name": "Humidity"
+      },
+      "pm25": {
+        "name": "PM2.5"
+      },
+      "cleaned_air_volume": {
+        "name": "Cleaned air volume"
+      },
+      "odor_level": {
+        "name": "Odor level"
+      },
+      "dust_level": {
+        "name": "Dust level"
+      },
+      "cleanliness_level": {
+        "name": "Cleanliness level"
+      },
+      "water_tank": {
+        "name": "Water tank"
       }
     },
     "binary_sensor": {
@@ -101,11 +229,109 @@
       },
       "fault": {
         "name": "Fault"
+      },
+      "plasma_enabled": {
+        "name": "Plasmacluster"
+      },
+      "care_error": {
+        "name": "Care required"
+      },
+      "unit_date_error": {
+        "name": "Ion unit life ended"
+      },
+      "unit_out_error": {
+        "name": "Ion unit missing"
+      },
+      "humidifying": {
+        "name": "Humidifying"
+      },
+      "water_empty": {
+        "name": "Water tank empty"
+      },
+      "child_lock": {
+        "name": "Child lock"
+      },
+      "light_sensor_bright": {
+        "name": "Bright room"
+      },
+      "care_dust_filter": {
+        "name": "Dust filter care required"
+      },
+      "care_deodorizing_filter": {
+        "name": "Deodorizing filter care required"
+      },
+      "care_humidifying_filter": {
+        "name": "Humidifying filter care required"
+      },
+      "care_ion_cartridge": {
+        "name": "Ion cartridge care required"
+      },
+      "care_pci_unit": {
+        "name": "Ion unit care required"
+      },
+      "care_ac_filter_care": {
+        "name": "AC filter care required"
+      },
+      "care_dust_box": {
+        "name": "Dust box care required"
+      },
+      "care_back_panel": {
+        "name": "Back panel care required"
+      },
+      "care_air_filter": {
+        "name": "Air filter care required"
+      },
+      "care_prefilter": {
+        "name": "Prefilter care required"
+      },
+      "care_humidifying_prefilter": {
+        "name": "Humidifying prefilter care required"
+      },
+      "water_tank": {
+        "name": "Water tank"
       }
     },
     "switch": {
       "power": {
         "name": "Power"
+      },
+      "cloud": {
+        "name": "Cloud home fit"
+      },
+      "humidification": {
+        "name": "Humidification"
+      },
+      "notify_air_cleaner": {
+        "name": "Air cleaner notification"
+      },
+      "notify_temperature": {
+        "name": "Temperature notification"
+      },
+      "notify_human": {
+        "name": "Human notification"
+      }
+    },
+    "fan": {
+      "fan": {
+        "name": "Air purifier"
+      }
+    },
+    "number": {
+      "notify_temperature_lower": {
+        "name": "Temperature lower notification"
+      },
+      "notify_temperature_upper": {
+        "name": "Temperature upper notification"
+      }
+    },
+    "button": {
+      "refresh": {
+        "name": "Refresh cloud data"
+      }
+    },
+    "humidifier": {
+      "humidity_mode": {
+        "name": "Humidity Mode"
       }
     }
   }

@@ -5,10 +5,11 @@ from __future__ import annotations
 from typing import Any
 
 from .api import CocoroClient, Device
+from .protocol import parse_status
 
 
 def hex_value(value: Any) -> int | None:
-    """Preserve unavailable/malformed fields as unknown."""
+    """Decode an available hexadecimal property."""
     return int(value, 16) if value is not None else None
 
 
@@ -70,6 +71,12 @@ class AirDevice:
     def __init__(self, session: CocoroClient, device: Device) -> None:
         self.session = session
         self.device = device
+        self.metadata = {
+            "device_id": device.device_id,
+            "model_name": device.model_name,
+            "zip_code": device.zip_code,
+            "spec": device.spec,
+        }
 
     async def async_update(self) -> dict[str, Any]:
         body = await self.session.async_request(
@@ -83,38 +90,135 @@ class AirDevice:
             },
         )
         data = body["data"]
-        return parse_air_data(data)
+        legacy = parse_air_data(data)
+        parsed = parse_status(body, self.device.spec)
+        legacy_keys = (
+            "humidity_mode",
+            "water_tank",
+            "cleaned_air_volume",
+            "cleanliness_level",
+        )
+        return {**parsed, **{key: legacy[key] for key in legacy_keys}}
 
     async def async_set_humidity_mode(self, enabled: bool) -> None:
-        await self.session.async_request(
-            "sync/air-cleaner",
-            "sync_aircleaner_032",
-            method="POST",
-            json={
-                "additional_request": False,
-                "deviceToken": self.device.device_id,
-                "event_key": "echonet_control",
-                "data": [
-                    {"opc": "k3", "odt": {"s5": "00", "s7": "FF" if enabled else "00"}}
-                ],
-                "model_name": self.device.model_name,
-            },
+        await self.control(
+            self.metadata,
+            [{"opc": "k3", "odt": {"s5": "00", "s7": "FF" if enabled else "00"}}],
         )
 
     async def async_set_power(self, enabled: bool) -> None:
-        """Send the same paired EPC/k3 command as PurifierStatusScreen."""
-        await self.session.async_request(
+        await self.control(
+            self.metadata,
+            [
+                {"epc": "0x80", "edt": "0x30" if enabled else "0x31"},
+                {"opc": "k3", "odt": {"s6": "FF" if enabled else "00"}},
+            ],
+        )
+
+    async def request(self, method, path, **kwargs):
+        return await self.session.async_request(path, None, method=method, **kwargs)
+
+    async def get_notifications(self, device_id):
+        return await self.request(
+            "GET", "notify_setting/air-cleaner", params={"device_id": device_id}
+        )
+
+    async def set_notifications(self, device_id, data):
+        return await self.request(
+            "POST",
+            "notify_setting/air-cleaner",
+            json={"bff_device_id": device_id, "data": data},
+        )
+
+    async def read_properties(self, device_id, path, properties):
+        return await self.request(
+            "POST", path, json={"deviceToken": device_id, "properties": properties}
+        )
+
+    async def control(self, device, commands):
+        additional_request = int(device.get("spec", {}).get("seriiesCode", 0)) >= 6
+        return await self.request(
+            "POST",
             "sync/air-cleaner",
-            "sync_aircleaner_032",
-            method="POST",
             json={
-                "additional_request": False,
-                "deviceToken": self.device.device_id,
+                "deviceToken": device["device_id"],
+                "model_name": device.get("model_name", ""),
+                "additional_request": additional_request,
                 "event_key": "echonet_control",
-                "data": [
-                    {"epc": "0x80", "edt": "0x30" if enabled else "0x31"},
-                    {"opc": "k3", "odt": {"s6": "FF" if enabled else "00"}},
-                ],
-                "model_name": self.device.model_name,
+                "data": commands,
             },
+        )
+
+    async def control_properties(self, device_id, properties):
+        return await self.read_properties(
+            device_id, "devices/control/air-cleaner", properties
+        )
+
+    async def get_supplies(self, device_id):
+        return await self.read_properties(
+            device_id, "contents/supplies", [{"apg": "0x02", "apc": ["0x10"]}]
+        )
+
+    async def get_pets(self, device_id):
+        return await self.read_properties(
+            device_id, "contents/pets", [{"apg": "0x01", "apc": ["0x00"]}]
+        )
+
+    async def get_tariff(self, device_id):
+        return await self.read_properties(
+            device_id, "latest/air-cleaner", [{"apg": "0x01", "apc": ["0x50"]}]
+        )
+
+    async def get_weather(self, device, date=None):
+        params = {"zipcode": device["zip_code"], "apc": "0x01+0x10+0x20+0x30"}
+        if date is not None:
+            params["date"] = date
+        return await self.request("GET", "weathers", params=params)
+
+    async def get_air_history(self, device_id, from_time, to_time, count=1000):
+        return await self.history(
+            device_id,
+            [
+                {
+                    "apg": "0x01",
+                    "apc": ["0x20"],
+                    "epc_ext": [{"opc": "k1"}, {"opc": "k2"}, {"opc": "k3"}],
+                }
+            ],
+            from_time,
+            to_time,
+            count=count,
+        )
+
+    async def history(
+        self, device_id, properties, from_time, to_time, count=100, offset=0
+    ):
+        return await self.request(
+            "POST",
+            "history-conceal/air-cleaner",
+            json={
+                "deviceToken": device_id,
+                "properties": properties,
+                "from_time": from_time,
+                "to_time": to_time,
+                "count": count,
+                "offset": offset,
+            },
+        )
+
+    async def write_supplies(self, device_id, properties):
+        return await self.read_properties(
+            device_id, "contents/control/supplies", properties
+        )
+
+    async def write_pet(self, device_id, properties):
+        return await self.read_properties(
+            device_id, "contents/control/pets", properties
+        )
+
+    async def delete_pet(self, device_id, pet_id):
+        return await self.request(
+            "DELETE",
+            "contents/control/pets",
+            params={"device_id": device_id, "apc": "0x00", "adt": pet_id},
         )
